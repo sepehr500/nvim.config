@@ -197,7 +197,9 @@ local function setup_terminal()
   vim.cmd 'terminal'
 
   -- Split the window horizontally
-  vim.cmd 'split'
+  vim.cmd 'new'
+
+  vim.cmd 'terminal'
 
   -- Adjust focus to the original window (optional, remove this line if you want to stay in the terminal)
   vim.cmd 'wincmd h'
