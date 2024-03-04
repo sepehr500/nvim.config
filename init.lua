@@ -184,6 +184,31 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+-- Function to set up the terminal on the right and split
+local function setup_terminal()
+  -- Calculate the width for the new window (20% of the current total width)
+  local width = math.floor(vim.o.columns * 0.2)
+
+  -- Open a new vertical window on the right with the desired width
+  vim.cmd 'vnew'
+  vim.cmd('vertical resize ' .. width)
+
+  -- Start a terminal session in the new window
+  vim.cmd 'terminal'
+
+  -- Split the window horizontally
+  vim.cmd 'split'
+
+  -- Adjust focus to the original window (optional, remove this line if you want to stay in the terminal)
+  vim.cmd 'wincmd h'
+end
+
+-- Auto command to run the setup function when Neovim starts
+vim.api.nvim_create_autocmd('VimEnter', {
+  pattern = '*',
+  callback = setup_terminal,
+})
+
 -- [[ Basic Autocommands ]]
 --  See :help lua-guide-autocommands
 
@@ -250,7 +275,7 @@ require('lazy').setup {
   --    require('Comment').setup({})
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-
+  { 'stevearc/oil.nvim', opts = {}, dependencies = { 'nvim-tree/nvim-web-devicons' } },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
