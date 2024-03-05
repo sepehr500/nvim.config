@@ -183,6 +183,7 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.api.nvim_set_keymap('n', '<C-/>', ':ToggleTerm size=40 direction=vertical<CR>', { noremap = true, silent = true })
 
 --
 -- -- Function to set up the terminal on the right and split
@@ -288,7 +289,7 @@ require('lazy').setup {
       vim.keymap.set('n', '<leader>a', function()
         harpoon:list():append()
       end)
-      vim.keymap.set('n', '<leader>e', function()
+      vim.keymap.set('n', '<leader>j', function()
         harpoon.ui:toggle_quick_menu(harpoon:list())
       end)
       vim.keymap.set('n', '<leader>1', function()
@@ -338,6 +339,17 @@ require('lazy').setup {
   -- after the plugin has been loaded:
   --  config = function() ... end
 
+  {
+    'kevinhwang91/nvim-ufo',
+    opts = {},
+    dependencies = {
+      'kevinhwang91/promise-async',
+    },
+    init = function()
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
+    end,
+  },
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VeryLazy', -- Sets the loading event to 'VeryLazy'
@@ -503,6 +515,7 @@ require('lazy').setup {
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
   },
+  { 'akinsho/toggleterm.nvim', version = '*', config = true },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
