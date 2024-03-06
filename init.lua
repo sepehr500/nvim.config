@@ -313,6 +313,13 @@ require('lazy').setup {
       end)
     end,
   },
+  {
+    'sindrets/diffview.nvim',
+    event = 'VeryLazy',
+    init = function()
+      vim.keymap.set('n', '<leader>gd', ':DiffviewOpen<CR>', { desc = '[G]it [D]iff' })
+    end,
+  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
@@ -321,6 +328,7 @@ require('lazy').setup {
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
+      current_line_blame = true,
       signs = {
         add = { text = '+' },
         change = { text = '~' },
@@ -329,6 +337,9 @@ require('lazy').setup {
         changedelete = { text = '~' },
       },
     },
+    init = function()
+      vim.keymap.set('n', '<leader>gb', ':Gitsigns blame_line<CR>', { desc = '[G]it [B]lame' })
+    end,
   },
 
   -- NOTE: Plugins can also be configured to run lua code when they are loaded.
@@ -385,6 +396,9 @@ require('lazy').setup {
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
+    init = function()
+      vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = '[G]it [G]ui' })
+    end,
   },
   {
     'romgrk/barbar.nvim',
