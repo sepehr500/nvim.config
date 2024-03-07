@@ -934,6 +934,19 @@ require('lazy').setup {
   --   end,
   -- },
   -- Highlight todo, notes, etc in comments
+  --
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    opts = {},
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'auto',
+        },
+      }
+    end,
+  },
   { 'folke/todo-comments.nvim', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   {
     'kylechui/nvim-surround',
@@ -977,10 +990,10 @@ require('lazy').setup {
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      require('mini.statusline').setup()
-      MiniStatusline.section_location = function()
-        return '%2l:%-2v'
-      end
+      -- require('mini.statusline').setup()
+      -- MiniStatusline.section_location = function()
+      --   return '%2l:%-2v'
+      -- end
 
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
