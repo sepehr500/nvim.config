@@ -473,13 +473,15 @@ require('lazy').setup {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      --
+      --
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         -- defaults = {
         --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+        --     i = { ['<c-o>'] = trouble.open_with_trouble },
         --   },
         -- },
         -- pickers = {
@@ -931,15 +933,6 @@ require('lazy').setup {
   --     vim.cmd.hi 'Comment gui=none'
   --   end,
   -- },
-  {
-    'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    opts = {
-      -- your configuration comes here
-      -- or leave it empty to use the default settings
-      -- refer to the configuration section below
-    },
-  },
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
   {
@@ -950,6 +943,13 @@ require('lazy').setup {
       require('nvim-surround').setup {
         -- Configuration here, or leave empty to use defaults
       }
+    end,
+  },
+  {
+    'almo7aya/openingh.nvim',
+    event = 'VeryLazy',
+    init = function()
+      vim.keymap.set('n', '<leader>gl', ':OpenInGHFileLines<CR>', { desc = '[G]ithub [L]ine', noremap = true, silent = true })
     end,
   },
   { -- Collection of various small independent plugins/modules
