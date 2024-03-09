@@ -314,6 +314,22 @@ require('lazy').setup {
     end,
   },
   {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        theme = 'hyper',
+        config = {
+          week_header = {
+            enable = true,
+          },
+        },
+        -- config
+      }
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  },
+  {
     'sindrets/diffview.nvim',
     event = 'VeryLazy',
     init = function()
@@ -401,21 +417,17 @@ require('lazy').setup {
     end,
   },
   {
-    'romgrk/barbar.nvim',
-    dependencies = {
-      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
-    },
+    'akinsho/bufferline.nvim',
+    version = '*',
+    opts = {},
+    dependencies = 'nvim-tree/nvim-web-devicons',
     init = function()
-      vim.g.barbar_auto_setup = false
+      require('bufferline').setup {
+        options = {
+          diagnostics = 'nvim_lsp',
+        },
+      }
     end,
-    opts = {
-      -- lazy.nvim will automatically call setup for you. put your options here, anything missing will use the default:
-      -- animation = true,
-      -- insert_at_start = true,
-      -- …etc.
-    },
-    version = '^1.0.0', -- optional: only update when a new 1.x version is released
   },
 
   -- NOTE: Plugins can specify dependencies.
@@ -980,6 +992,7 @@ require('lazy').setup {
           use_as_default_explorer = false,
         },
       }
+      require('mini.animate').setup()
 
       -- Remap adding surrounding to Visual mode selection
       vim.api.nvim_set_keymap('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { noremap = true })
