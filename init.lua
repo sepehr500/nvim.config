@@ -287,32 +287,31 @@ require('lazy').setup {
   --    require('Comment').setup({})
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
-  { 'stevearc/oil.nvim', opts = {}, dependencies = { 'nvim-tree/nvim-web-devicons' } },
   {
-    'ThePrimeagen/harpoon',
-    branch = 'harpoon2',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      local harpoon = require 'harpoon'
-      vim.keymap.set('n', '<leader>a', function()
-        harpoon:list():append()
-      end)
-      vim.keymap.set('n', '<leader>j', function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end)
-      vim.keymap.set('n', '<leader>1', function()
-        harpoon:list():select(1)
-      end)
-      vim.keymap.set('n', '<leader>2', function()
-        harpoon:list():select(2)
-      end)
-      vim.keymap.set('n', '<leader>3', function()
-        harpoon:list():select(3)
-      end)
-      vim.keymap.set('n', '<leader>4', function()
-        harpoon:list():select(4)
-      end)
+    'stevearc/oil.nvim',
+    opts = {},
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    init = function()
+      vim.keymap.set('n', '<leader>o', '<CMD>Oil<CR>')
     end,
+  },
+  {
+    'cbochs/grapple.nvim',
+    opts = {
+      scope = 'git', -- also try out "git_branch"
+    },
+    event = { 'BufReadPost', 'BufNewFile' },
+    cmd = 'Grapple',
+    keys = {
+      { '<leader>a', '<cmd>Grapple toggle<cr>', desc = 'Grapple toggle tag' },
+      { '<leader>j', '<cmd>Grapple toggle_tags<cr>', desc = 'Grapple toggle tags' },
+      { '<leader>k', '<cmd>Grapple cycle forward<cr>', desc = 'Grapple cycle forward' },
+      { '<leader>K', '<cmd>Grapple cycle backward<cr>', desc = 'Grapple cycle backward' },
+      { '<leader>1', '<cmd>Grapple select index=1<cr>', desc = 'Grapple select 1' },
+      { '<leader>2', '<cmd>Grapple select index=2<cr>', desc = 'Grapple select 2' },
+      { '<leader>3', '<cmd>Grapple select index=3<cr>', desc = 'Grapple select 3' },
+      { '<leader>4', '<cmd>Grapple select index=3<cr>', desc = 'Grapple select 4' },
+    },
   },
   {
     'nvimdev/dashboard-nvim',
@@ -954,7 +953,11 @@ require('lazy').setup {
     opts = {},
     config = function()
       require('lualine').setup {
+        sections = {
+          lualine_b = { 'grapple' },
+        },
         options = {
+          show_filename_only = false,
           theme = 'auto',
         },
       }
