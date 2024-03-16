@@ -955,9 +955,11 @@ require('lazy').setup {
       require('lualine').setup {
         sections = {
           lualine_b = { 'grapple' },
+          lualine_c = {
+            { 'filename', path = 1 }, -- This sets the filename component to show the full path
+          },
         },
         options = {
-          show_filename_only = false,
           theme = 'auto',
         },
       }
