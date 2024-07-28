@@ -233,6 +233,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*',
+  callback = function(args)
+    require('conform').format { bufnr = args.buf }
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -816,11 +823,11 @@ require('lazy').setup {
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        javascript = { { 'prettier' } },
-        typescript = { { 'prettier' } },
-        typescriptreact = { { 'prettier' } },
-        javascriptreact = { { 'prettier' } },
-        css = { { 'prettier' } },
+        javascript = { 'eslint_d', 'prettierd' },
+        typescript = { 'eslint_d', 'prettierd' },
+        typescriptreact = { 'eslint_d', 'prettierd' },
+        javascriptreact = { 'eslint_d', 'prettierd' },
+        css = { 'eslint_d', 'prettierd' },
       },
     },
   },
