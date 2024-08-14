@@ -190,6 +190,7 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.api.nvim_set_keymap('n', '<C-/>', ':ToggleTerm size=40 direction=vertical<CR>', { noremap = true, silent = true })
+vim.lsp.inlay_hint.enable()
 
 --
 -- -- Function to set up the terminal on the right and split
@@ -614,6 +615,8 @@ require('lazy').setup {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+      require('lspconfig').gleam.setup {}
+      require('lspconfig').gopls.setup {}
       -- Brief Aside: **What is LSP?**
       --
       -- LSP is an acronym you've probably heard, but might not understand what it is.
@@ -746,7 +749,6 @@ require('lazy').setup {
         -- But for many setups, the LSP (`tsserver`) will work just fine
         -- tsserver = {},
         --
-
         lua_ls = {
           -- cmd = {...},
           -- filetypes { ...},
@@ -1064,7 +1066,7 @@ require('lazy').setup {
 
       ---@diagnostic disable-next-line: missing-fields
       require('nvim-treesitter.configs').setup {
-        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc' },
+        ensure_installed = { 'bash', 'c', 'html', 'lua', 'markdown', 'vim', 'vimdoc', 'gleam', 'go', 'python' },
         -- Autoinstall languages that are not installed
         auto_install = true,
         highlight = { enable = true },
