@@ -95,6 +95,9 @@ vim.g.maplocalleader = ' '
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
 
+-- more colors in terminal
+vim.opt.termguicolors = true
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, for help with jumping.
@@ -374,6 +377,13 @@ require('lazy').setup {
       vim.keymap.set('n', '<leader>gd', ':DiffviewOpen<CR>', { desc = '[G]it [D]iff' })
     end,
   },
+  {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'VeryLazy',
+    config = function()
+      require('tiny-inline-diagnostic').setup()
+    end,
+  },
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following lua:
   --    require('gitsigns').setup({ ... })
@@ -462,6 +472,8 @@ require('lazy').setup {
     init = function()
       require('bufferline').setup {
         options = {
+          show_buffer_close_icons = false,
+          show_close_icon = false,
           diagnostics = 'nvim_lsp',
         },
       }
@@ -617,6 +629,7 @@ require('lazy').setup {
     config = function()
       require('lspconfig').gleam.setup {}
       require('lspconfig').gopls.setup {}
+      require('lspconfig').pyright.setup {}
       -- Brief Aside: **What is LSP?**
       --
       -- LSP is an acronym you've probably heard, but might not understand what it is.
@@ -986,6 +999,7 @@ require('lazy').setup {
   -- },
   -- Highlight todo, notes, etc in comments
   --
+  -- Status line
   {
     'nvim-lualine/lualine.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -993,10 +1007,14 @@ require('lazy').setup {
     config = function()
       require('lualine').setup {
         sections = {
+          lualine_a = { 'mode' },
           lualine_b = { 'grapple' },
           lualine_c = {
             { 'filename', path = 1 }, -- This sets the filename component to show the full path
           },
+          lualine_x = { 'diagnostics', 'diff' },
+          lualine_y = { 'filetype' },
+          lualine_z = { 'branch' },
         },
         options = {
           theme = 'auto',
