@@ -318,6 +318,20 @@ require('lazy').setup {
       'nvim-telescope/telescope.nvim',
     },
   },
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+
+    ---enables autocomplete for opts
+    ---@module "auto-session"
+    ---@type AutoSession.Config
+    opts = {
+      suppressed_dirs = { '~/Downloads' },
+      auto_restore_last_session = false,
+      auto_save_enabled = true,
+      -- log_level = 'debug',
+    },
+  },
   { 'github/copilot.vim' },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
