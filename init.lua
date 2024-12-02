@@ -630,6 +630,13 @@ require('lazy').setup {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
+    config = function()
+      local lspconfig = require 'lspconfig'
+      require('typescript-tools').setup {
+        single_file_support = false,
+        root_dir = lspconfig.util.root_pattern 'package.json',
+      }
+    end,
   },
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
   { -- LSP Configuration & Plugins
@@ -645,9 +652,13 @@ require('lazy').setup {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
+      local lspconfig = require 'lspconfig'
       require('lspconfig').gleam.setup {}
       require('lspconfig').gopls.setup {}
       require('lspconfig').pyright.setup {}
+      require('lspconfig').denols.setup {
+        root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
+      }
       -- Brief Aside: **What is LSP?**
       --
       -- LSP is an acronym you've probably heard, but might not understand what it is.
@@ -872,12 +883,29 @@ require('lazy').setup {
     },
     config = function()
       local lint = require 'lint'
+      local lspconfig = require 'lspconfig'
+      local root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc')
+      local function determine_linter()
+        local cwd = vim.fn.getcwd()
+        if root_dir(cwd) then
+          return 'deno'
+        else
+          return 'eslint_d'
+        end
+      end
+
       lint.linters_by_ft = {
-        typescript = { 'eslint_d' },
         typescriptreact = { 'eslint_d' },
         javascript = { 'eslint_d' },
         javascriptreact = { 'eslint_d' },
       }
+      -- Check if the current project is a Deno project
+      if lspconfig.util.root_pattern('deno.json', 'deno.jsonc')(vim.fn.getcwd()) then
+        lint.linters_by_ft.typescript = { 'deno' }
+      else
+        lint.linters_by_ft.typescript = { 'eslint_d' }
+      end
+
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
       vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost', 'InsertLeave' }, {
         group = lint_augroup,
