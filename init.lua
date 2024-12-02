@@ -884,15 +884,6 @@ require('lazy').setup {
     config = function()
       local lint = require 'lint'
       local lspconfig = require 'lspconfig'
-      local root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc')
-      local function determine_linter()
-        local cwd = vim.fn.getcwd()
-        if root_dir(cwd) then
-          return 'deno'
-        else
-          return 'eslint_d'
-        end
-      end
 
       lint.linters_by_ft = {
         typescriptreact = { 'eslint_d' },
