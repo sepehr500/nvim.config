@@ -764,6 +764,8 @@ require('lazy').setup {
       require('lspconfig').gleam.setup {}
       require('lspconfig').gopls.setup {}
       require('lspconfig').pyright.setup {}
+      -- Be careful here. If mason installs deno, it will overwrite tstools no matter what
+      -- If you see deno being used for typescript files all the time uninstall Deno in mason
       require('lspconfig').denols.setup {
         root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
       }
