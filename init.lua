@@ -652,12 +652,6 @@ require('lazy').setup {
     },
     config = function()
       local lspconfig = require 'lspconfig'
-      require('lspconfig').gleam.setup {}
-      require('lspconfig').gopls.setup {}
-      require('lspconfig').pyright.setup {}
-      require('lspconfig').denols.setup {
-        root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
-      }
       -- Brief Aside: **What is LSP?**
       --
       -- LSP is an acronym you've probably heard, but might not understand what it is.
@@ -767,6 +761,13 @@ require('lazy').setup {
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
+      require('lspconfig').gleam.setup {}
+      require('lspconfig').gopls.setup {}
+      require('lspconfig').pyright.setup {}
+      require('lspconfig').denols.setup {
+        root_dir = lspconfig.util.root_pattern('deno.json', 'deno.jsonc'),
+      }
+
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
@@ -776,6 +777,8 @@ require('lazy').setup {
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
+      -- Sepehr Note: I am manually calling setup above. This works because I mainly use ts-tools
+      -- But this means only the servers below are installed automatically. Not sure if that is an issue
       local servers = {
         -- clangd = {},
         -- gopls = {},
@@ -824,6 +827,7 @@ require('lazy').setup {
 
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
+      -- Uses the server object above
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format lua code
@@ -834,6 +838,7 @@ require('lazy').setup {
 
         handlers = {
           function(server_name)
+            -- Uses the server object above (only lua is in that object)
             local server = servers[server_name] or {}
             require('lspconfig')[server_name].setup {
               cmd = server.cmd,
