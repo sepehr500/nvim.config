@@ -577,7 +577,21 @@ require('lazy').setup {
       }
     end,
   },
+  { 'rafamadriz/friendly-snippets' },
+  {
+    'L3MON4D3/LuaSnip',
+    -- follow latest release.
+    event = 'VeryLazy',
+    version = 'v2.*', -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+    -- install jsregexp (optional!).
+    build = 'make install_jsregexp',
+    dependencies = { 'rafamadriz/friendly-snippets' },
+    config = function()
+      require('luasnip.loaders.from_vscode').load()
+    end,
+  },
   { 'akinsho/toggleterm.nvim', version = '*', config = true },
+
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
