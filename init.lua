@@ -512,6 +512,9 @@ require('lazy').setup {
       local fzf = require 'fzf-lua'
 
       fzf.setup {
+        files = {
+          formatter = 'path.filename_first',
+        },
         keymap = {
           fzf = {
             ['ctrl-q'] = 'select-all+accept',
