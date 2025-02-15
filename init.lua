@@ -158,6 +158,9 @@ vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
+-- Disable swapfile
+vim.opt.swapfile = false
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
@@ -291,7 +294,25 @@ require('lazy').setup {
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
     config = function()
-      require('chatgpt').setup()
+      require('chatgpt').setup {
+        openai_params = {
+          model = 'gpt-4o-mini-2024-07-18',
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          max_tokens = 300,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
+        },
+        openai_edit_params = {
+          model = 'gpt-4o-mini-2024-07-18',
+          frequency_penalty = 0,
+          presence_penalty = 0,
+          temperature = 0,
+          top_p = 1,
+          n = 1,
+        },
+      }
       require('which-key').add {
         {
           mode = { 'n', 'v' },
@@ -540,7 +561,7 @@ require('lazy').setup {
       vim.keymap.set('n', '<leader>sg', fzf.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', fzf.diagnostics_workspace, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', fzf.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', fzf.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>s.', fzf.registers, { desc = '[S]earch [.]Registers' })
       vim.keymap.set('n', '<leader>st', fzf.treesitter, { desc = '[S]earch Treesitter' })
       vim.keymap.set('n', '<leader><leader>', fzf.buffers, { desc = '[ ] Find existing buffers' })
 
@@ -847,15 +868,18 @@ require('lazy').setup {
       local lspconfig = require 'lspconfig'
 
       lint.linters_by_ft = {
-        typescriptreact = { 'eslint_d' },
         javascript = { 'eslint_d' },
         javascriptreact = { 'eslint_d' },
       }
       -- Check if the current project is a Deno project
       if lspconfig.util.root_pattern('deno.json', 'deno.jsonc')(vim.fn.getcwd()) then
         lint.linters_by_ft.typescript = { 'deno' }
+      elseif lspconfig.util.root_pattern 'biome.json'(vim.fn.getcwd()) then
+        lint.linters_by_ft.typescript = { 'biomejs' }
+        lint.linters_by_ft.typescriptreact = { 'biomejs' }
       else
         lint.linters_by_ft.typescript = { 'eslint_d' }
+        lint.linters_by_ft.typescriptreact = { 'eslint_d' }
       end
 
       local lint_augroup = vim.api.nvim_create_augroup('lint', { clear = true })
