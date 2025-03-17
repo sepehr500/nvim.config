@@ -195,7 +195,6 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-vim.api.nvim_set_keymap('n', '<C-/>', ':ToggleTerm size=40 direction=vertical<CR>', { noremap = true, silent = true })
 vim.lsp.inlay_hint.enable()
 
 --
@@ -364,6 +363,41 @@ require('lazy').setup {
   --    require('Comment').setup({})
   -- "gc" to comment visual regions/lines
   { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'piersolenski/wtf.nvim',
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+    },
+    opts = {
+      search_engine = 'perplexity',
+    },
+    keys = {
+      {
+        '<leader>wa',
+        mode = { 'n', 'x' },
+        function()
+          require('wtf').ai()
+        end,
+        desc = 'Debug diagnostic with AI',
+      },
+      {
+        mode = { 'n' },
+        '<leader>wg',
+        function()
+          require('wtf').search()
+        end,
+        desc = 'Search diagnostic with Google',
+      },
+      {
+        mode = { 'n' },
+        '<leader>wh',
+        function()
+          require('wtf').history()
+        end,
+        desc = 'Populate the quickfix list with previous chat history',
+      },
+    },
+  },
   {
     'stevearc/oil.nvim',
     opts = {},
@@ -614,8 +648,22 @@ require('lazy').setup {
       require('luasnip.loaders.from_vscode').load()
     end,
   },
-  { 'akinsho/toggleterm.nvim', version = '*', config = true },
-
+  {
+    'akinsho/toggleterm.nvim',
+    version = '*',
+    opts = {
+      open_mapping = [[<C-/>]],
+      size = function(term)
+        if term.direction == 'horizontal' then
+          return vim.o.columns * 0.3
+        elseif term.direction == 'vertical' then
+          -- return vim.o.columns * 0.4
+          return vim.o.columns * 0.3
+        end
+      end,
+      direction = 'vertical',
+    },
+  },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
     dependencies = {
