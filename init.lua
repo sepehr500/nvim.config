@@ -874,7 +874,8 @@ require('lazy').setup {
       -- Check if the current project is a Deno project
       if lspconfig.util.root_pattern('deno.json', 'deno.jsonc')(vim.fn.getcwd()) then
         lint.linters_by_ft.typescript = { 'deno' }
-      elseif lspconfig.util.root_pattern 'biome.json'(vim.fn.getcwd()) then
+      -- vim.fn.getcwd() uses the dirctory that you opened nvim on...we want the current buffer location.
+      elseif lspconfig.util.root_pattern 'biome.json'(vim.fn.expand '%:p:h') then
         lint.linters_by_ft.typescript = { 'biomejs' }
         lint.linters_by_ft.typescriptreact = { 'biomejs' }
       else
@@ -1023,7 +1024,8 @@ require('lazy').setup {
           use_as_default_explorer = false,
         },
       }
-      require('mini.animate').setup()
+      -- This is another way of doing smooth scrolling
+      -- require('mini.animate').setup()
 
       -- Remap adding surrounding to Visual mode selection
       vim.api.nvim_set_keymap('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { noremap = true })
