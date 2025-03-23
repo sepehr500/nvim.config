@@ -294,8 +294,9 @@ require('lazy').setup {
     event = 'VeryLazy',
     config = function()
       require('chatgpt').setup {
+        api_key_cmd = 'echo $OPENAI_API_KEY',
         openai_params = {
-          model = 'gpt-4o-mini-2024-07-18',
+          model = 'gpt-4o',
           frequency_penalty = 0,
           presence_penalty = 0,
           max_tokens = 300,
@@ -304,7 +305,7 @@ require('lazy').setup {
           n = 1,
         },
         openai_edit_params = {
-          model = 'gpt-4o-mini-2024-07-18',
+          model = 'gpt-4o',
           frequency_penalty = 0,
           presence_penalty = 0,
           temperature = 0,
@@ -414,7 +415,7 @@ require('lazy').setup {
     event = { 'BufReadPost', 'BufNewFile' },
     cmd = 'Grapple',
     keys = {
-      { '<leader>a', '<cmd>Grapple toggle<cr>', desc = 'Grapple toggle tag' },
+      { '<leader>t', '<cmd>Grapple toggle<cr>', desc = 'Grapple toggle tag' },
       { '<leader>j', '<cmd>Grapple toggle_tags<cr>', desc = 'Grapple toggle tags' },
       { '<leader>k', '<cmd>Grapple cycle forward<cr>', desc = 'Grapple cycle forward' },
       { '<leader>K', '<cmd>Grapple cycle backward<cr>', desc = 'Grapple cycle backward' },
@@ -789,6 +790,7 @@ require('lazy').setup {
       require('lspconfig').gleam.setup {}
       require('lspconfig').gopls.setup {}
       require('lspconfig').pyright.setup {}
+      require('lspconfig').zls.setup {}
       -- Be careful here. If mason installs deno, it will overwrite tstools no matter what
       -- If you see deno being used for typescript files all the time uninstall Deno in mason
       require('lspconfig').denols.setup {
