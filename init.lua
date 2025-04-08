@@ -334,17 +334,17 @@ require('lazy').setup {
       },
     },
   },
-  {
-    'supermaven-inc/supermaven-nvim',
-    config = function()
-      require('supermaven-nvim').setup {
-        keymaps = {
-          accept_suggestion = '<C-j>',
-          accept_word = '<C-]>',
-        },
-      }
-    end,
-  },
+  -- {
+  --   'supermaven-inc/supermaven-nvim',
+  --   config = function()
+  --     require('supermaven-nvim').setup {
+  --       keymaps = {
+  --         accept_suggestion = '<C-j>',
+  --         accept_word = '<C-]>',
+  --       },
+  --     }
+  --   end,
+  -- },
   {
     'jackMort/ChatGPT.nvim',
     event = 'VeryLazy',
@@ -409,13 +409,16 @@ require('lazy').setup {
       -- log_level = 'debug',
     },
   },
-  -- { 'github/copilot.vim' },
-  -- You also need to add the following to your init.lua
-  -- vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
-  --   expr = true,
-  --   replace_keycodes = false,
-  -- })
-  -- vim.g.copilot_no_tab_map = true
+  {
+    'github/copilot.vim',
+    init = function()
+      vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+        expr = true,
+        replace_keycodes = false,
+      })
+      vim.g.copilot_no_tab_map = true
+    end,
+  },
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
