@@ -588,19 +588,15 @@ require('lazy').setup {
     end,
   },
   {
-    'kdheepak/lazygit.nvim',
-    cmd = {
-      'LazyGit',
-      'LazyGitConfig',
-      'LazyGitCurrentFile',
-      'LazyGitFilter',
-      'LazyGitFilterCurrentFile',
-    },
-    dependencies = {
-      'nvim-lua/plenary.nvim',
+    'folke/snacks.nvim',
+    ---@type snacks.Config
+    opts = {
+      lazygit = {},
     },
     init = function()
-      vim.keymap.set('n', '<leader>gg', ':LazyGit<CR>', { desc = '[G]it [G]ui' })
+      vim.keymap.set('n', '<leader>gg', function()
+        require('snacks').lazygit.open()
+      end, { desc = '[G]it [G]ui' })
     end,
   },
   {
