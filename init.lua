@@ -944,15 +944,16 @@ require('lazy').setup {
       }
     end,
   },
-
   { -- Autoformat
     'stevearc/conform.nvim',
     opts = {
       notify_on_error = false,
-      format_on_save = {
-        timeout_ms = 500,
-        lsp_fallback = true,
-      },
+      format_after_save = function(buf)
+        if vim.bo[buf].filetype == '' then
+          return
+        end -- skip no‑ft buffers
+        return { async = true, lsp_fallback = false, timeout_ms = 800 }
+      end,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
@@ -964,7 +965,7 @@ require('lazy').setup {
         typescript = { 'eslint_d', 'prettierd' },
         typescriptreact = { 'eslint_d', 'prettierd' },
         javascriptreact = { 'eslint_d', 'prettierd' },
-        css = { 'eslint_d', 'prettierd' },
+        css = { 'prettierd' },
       },
     },
   },
