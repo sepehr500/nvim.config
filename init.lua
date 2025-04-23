@@ -306,7 +306,6 @@ require('lazy').setup {
       'hrsh7th/nvim-cmp', -- autocompletion for avante commands and mentions
       'ibhagwan/fzf-lua', -- for file_selector provider fzf
       'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-      'zbirenbaum/copilot.lua', -- for providers='copilot'
       {
         -- support for image pasting
         'HakonHarnes/img-clip.nvim',
@@ -1137,7 +1136,11 @@ require('lazy').setup {
         },
       }
       -- This is another way of doing smooth scrolling
-      -- require('mini.animate').setup()
+      require('mini.animate').setup {
+        cursor = {
+          enable = false,
+        },
+      }
 
       -- Remap adding surrounding to Visual mode selection
       vim.api.nvim_set_keymap('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { noremap = true })
