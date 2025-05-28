@@ -712,18 +712,35 @@ require('lazy').setup {
   {
     'akinsho/toggleterm.nvim',
     version = '*',
-    opts = {
-      open_mapping = [[<C-/>]],
-      size = function(term)
-        if term.direction == 'horizontal' then
-          return vim.o.columns * 0.3
-        elseif term.direction == 'vertical' then
-          -- return vim.o.columns * 0.4
-          return vim.o.columns * 0.3
-        end
-      end,
-      direction = 'vertical',
-    },
+    config = function()
+      require('toggleterm').setup {
+        open_mapping = [[<C-/>]],
+        direction = 'vertical',
+        size = function(term)
+          if term.direction == 'horizontal' then
+            return 15
+          elseif term.direction == 'vertical' then
+            return math.floor(vim.o.columns * 0.33)
+          end
+        end,
+      }
+      local Terminal = require('toggleterm.terminal').Terminal
+
+      local claude_term = Terminal:new {
+        cmd = 'claude',
+        direction = 'vertical',
+        hidden = true,
+        size = function()
+          return math.floor(vim.o.columns * 0.33)
+        end,
+      }
+
+      function _CLAUDE_TOGGLE()
+        claude_term:toggle()
+      end
+
+      vim.api.nvim_set_keymap('n', '<leader>cc', '<cmd>lua _CLAUDE_TOGGLE()<CR>', { noremap = true, silent = true })
+    end,
   },
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -1039,6 +1056,11 @@ require('lazy').setup {
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer' },
       },
+
+      enabled = function()
+        -- Disable in Avante’s buffers
+        return vim.bo.filetype ~= 'Avante'
+      end,
     },
     opts_extend = { 'sources.default' },
   },
