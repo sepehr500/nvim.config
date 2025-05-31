@@ -167,6 +167,37 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Copy file path to clipboard
+vim.keymap.set('n', '<leader>cp', function()
+  local path = vim.fn.expand '%:p'
+  vim.fn.setreg('+', path)
+  print('Copied: ' .. path)
+end, { desc = '[C]opy file [P]ath' })
+
+-- Claude Code specific shortcuts
+vim.keymap.set('n', '<leader>cr', function()
+  local path = vim.fn.expand '%:p'
+  vim.fn.setreg('+', path)
+  vim.notify('File path copied for Claude Code', vim.log.levels.INFO)
+end, { desc = '[C]laude [R]ead - copy file path' })
+
+vim.keymap.set('v', '<leader>ce', function()
+  local start_pos = vim.fn.getpos "'<"
+  local end_pos = vim.fn.getpos "'>"
+  local path = vim.fn.expand '%:p'
+  local edit_cmd = string.format('%s:%d-%d', path, start_pos[2], end_pos[2])
+  vim.fn.setreg('+', edit_cmd)
+  vim.notify('Command copied for Claude Code', vim.log.levels.INFO)
+end, { desc = '[C]laude [E]dit - copy command for selection' })
+
+vim.keymap.set('n', '<leader>cf', function()
+  local path = vim.fn.expand '%:p'
+  local line = vim.fn.line '.'
+  local edit_cmd = string.format('%s:%d', path, line)
+  vim.fn.setreg('+', edit_cmd)
+  vim.notify('Edit command copied for Claude Code', vim.log.levels.INFO)
+end, { desc = '[C]laude [F]ix - copy edit command for current line' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
